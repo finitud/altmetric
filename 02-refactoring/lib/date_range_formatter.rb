@@ -34,10 +34,10 @@ class DateRangeFormatter
     "#{full_start_date} - #{full_end_date}"
   end
 
-  def date_with_time_formatter(date, time=nil, join_word='at', with_year: true, with_month: true)
+  def date_with_time_formatter(date, time = nil, with_year: true, with_month: true)
     month = ' %B' if with_month
     year = ' %Y' if with_year
-    time = " #{join_word} #{time}" if time
+    time = " at #{time}" if time
     date.strftime("#{date.day.ordinalize}#{month}#{year}#{time}")
   end
 
