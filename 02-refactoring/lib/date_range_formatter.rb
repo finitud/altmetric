@@ -64,13 +64,14 @@ class DateRangeFormatter
 
     if @start_date == @end_date
       return same_date_formatter(full_start_date, full_end_date)
-    elsif @start_date.month == @end_date.month
-      return same_month_formatter(full_start_date, full_end_date)
     elsif @start_date.year == @end_date.year
-      return same_year_formatter(full_start_date, full_end_date)
+      if @start_date.month == @end_date.month
+        return same_month_formatter(full_start_date, full_end_date)
+      else
+        return same_year_formatter(full_start_date, full_end_date)
+      end
     else
       return default_formatter(full_start_date, full_end_date)
     end
   end
 end
-
