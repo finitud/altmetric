@@ -39,19 +39,11 @@ class DateRangeFormatter
   end
 
   def same_year_formatter(start_date, end_date, start_time, end_time)
-    full_start_date = date_with_time_formatter(start_date)
-    full_end_date = date_with_time_formatter(end_date)
+    display_year = start_time || end_time
 
-    if start_time && end_time
-      "#{full_start_date} at #{start_time} - #{full_end_date} at #{end_time}"
-    elsif start_time
-      "#{full_start_date} at #{start_time} - #{full_end_date}"
-    elsif end_time
-      "#{full_start_date} - #{full_end_date} at #{end_time}"
-    else
-      start_date.strftime("#{start_date.day.ordinalize} %B - ") +
-      end_date.strftime("#{end_date.day.ordinalize} %B %Y")
-    end
+    full_start_date = date_with_time_formatter(start_date, start_time, with_year: display_year)
+    full_end_date = date_with_time_formatter(end_date, end_time)
+    "#{full_start_date} - #{full_end_date}"
   end
 
   def default_formatter(start_date, end_date, start_time, end_time)
@@ -60,10 +52,11 @@ class DateRangeFormatter
     "#{full_start_date} - #{full_end_date}"
   end
 
-  def date_with_time_formatter(date, time=nil, join_word='at')
-    output = date.strftime("#{date.day.ordinalize} %B %Y")
-    output += " #{join_word} #{time}" if time
-    output
+  def date_with_time_formatter(date, time=nil, join_word='at', with_year: true, with_month: true)
+    month = ' %B' if with_month
+    year = ' %Y' if with_year
+    time = " #{join_word} #{time}" if time
+    date.strftime("#{date.day.ordinalize}#{month}#{year}#{time}")
   end
 
   def to_s
