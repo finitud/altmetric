@@ -9,6 +9,14 @@ class DateRangeFormatter
     @end_time = end_time
   end
 
+  def to_s
+    if @start_date == @end_date
+      return same_date_formatter(@start_date, @start_time, @end_time)
+    else
+      return default_formatter(@start_date, @end_date, @start_time, @end_time)
+    end
+  end
+
   def same_date_formatter(start_date, start_time, end_time)
     base_date = date_time_format(start_date, start_time)
     if end_time
@@ -39,13 +47,5 @@ class DateRangeFormatter
     year = ' %Y' if with_year
     time = " at #{time}" if time
     date.strftime("#{date.day.ordinalize}#{month}#{year}#{time}")
-  end
-
-  def to_s
-    if @start_date == @end_date
-      return same_date_formatter(@start_date, @start_time, @end_time)
-    else
-      return default_formatter(@start_date, @end_date, @start_time, @end_time)
-    end
   end
 end
