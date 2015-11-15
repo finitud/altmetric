@@ -17,26 +17,19 @@ class DateRangeFormatter
     "#{base_date}#{suffix}"
   end
 
-  def same_month_formatter(start_date, end_date, start_time, end_time)
-    display_month_and_year = start_time || end_time
+  def default_formatter(start_date, end_date, start_time, end_time)
+    with_year = true
+    with_month = true
+
+    if start_date.year == end_date.year
+      with_year = start_time || end_time
+      with_month = start_time || end_time if start_date.month == end_date.month
+    end
+
     full_start_date = date_with_time_formatter(start_date,
                                                start_time,
-                                               with_year: display_month_and_year,
-                                               with_month: display_month_and_year)
-    full_end_date = date_with_time_formatter(end_date, end_time)
-    "#{full_start_date} - #{full_end_date}"
-  end
-
-  def same_year_formatter(start_date, end_date, start_time, end_time)
-    display_year = start_time || end_time
-
-    full_start_date = date_with_time_formatter(start_date, start_time, with_year: display_year)
-    full_end_date = date_with_time_formatter(end_date, end_time)
-    "#{full_start_date} - #{full_end_date}"
-  end
-
-  def default_formatter(start_date, end_date, start_time, end_time)
-    full_start_date = date_with_time_formatter(start_date, start_time)
+                                               with_year: with_year,
+                                               with_month: with_month)
     full_end_date = date_with_time_formatter(end_date, end_time)
     "#{full_start_date} - #{full_end_date}"
   end
@@ -51,12 +44,6 @@ class DateRangeFormatter
   def to_s
     if @start_date == @end_date
       return same_date_formatter(@start_date, @end_date, @start_time, @end_time)
-    elsif @start_date.year == @end_date.year
-      if @start_date.month == @end_date.month
-        return same_month_formatter(@start_date, @end_date, @start_time, @end_time)
-      else
-        return same_year_formatter(@start_date, @end_date, @start_time, @end_time)
-      end
     else
       return default_formatter(@start_date, @end_date, @start_time, @end_time)
     end
