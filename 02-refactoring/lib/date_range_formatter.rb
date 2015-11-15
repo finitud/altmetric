@@ -10,32 +10,21 @@ class DateRangeFormatter
   end
 
   def same_date_formatter(start_date, end_date, start_time, end_time)
-    full_start_date = date_with_time_formatter(start_date)
-
-    if start_time && end_time
-      "#{full_start_date} at #{start_time} to #{end_time}"
-    elsif start_time
-      "#{full_start_date} at #{start_time}"
-    elsif @end_time
-      "#{full_start_date} until #{end_time}"
-    else
-      full_start_date
+    base_date = date_with_time_formatter(start_date, start_time)
+    if end_time
+      suffix = start_time ? " to #{end_time}" : " until #{end_time}"
     end
+    "#{base_date}#{suffix}"
   end
 
   def same_month_formatter(start_date, end_date, start_time, end_time)
-    full_start_date = date_with_time_formatter(start_date)
-    full_end_date = date_with_time_formatter(end_date)
-
-    if start_time && end_time
-      "#{full_start_date} at #{start_time} - #{full_end_date} at #{end_time}"
-    elsif start_time
-      "#{full_start_date} at #{start_time} - #{full_end_date}"
-    elsif end_time
-      "#{full_start_date} - #{full_end_date} at #{end_time}"
-    else
-      @start_date.strftime("#{start_date.day.ordinalize} - #{end_date.day.ordinalize} %B %Y")
-    end
+    display_month_and_year = start_time || end_time
+    full_start_date = date_with_time_formatter(start_date,
+                                               start_time,
+                                               with_year: display_month_and_year,
+                                               with_month: display_month_and_year)
+    full_end_date = date_with_time_formatter(end_date, end_time)
+    "#{full_start_date} - #{full_end_date}"
   end
 
   def same_year_formatter(start_date, end_date, start_time, end_time)
