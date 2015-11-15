@@ -9,8 +9,8 @@ class DateRangeFormatter
     @end_time = end_time
   end
 
-  def same_date_formatter(start_date, end_date, start_time, end_time)
-    base_date = date_with_time_formatter(start_date, start_time)
+  def same_date_formatter(start_date, start_time, end_time)
+    base_date = date_time_format(start_date, start_time)
     if end_time
       suffix = start_time ? " to #{end_time}" : " until #{end_time}"
     end
@@ -26,15 +26,15 @@ class DateRangeFormatter
       with_month = start_time || end_time if start_date.month == end_date.month
     end
 
-    full_start_date = date_with_time_formatter(start_date,
-                                               start_time,
-                                               with_year: with_year,
-                                               with_month: with_month)
-    full_end_date = date_with_time_formatter(end_date, end_time)
+    full_start_date = date_time_format(start_date,
+                                       start_time,
+                                       with_year: with_year,
+                                       with_month: with_month)
+    full_end_date = date_time_format(end_date, end_time)
     "#{full_start_date} - #{full_end_date}"
   end
 
-  def date_with_time_formatter(date, time = nil, with_year: true, with_month: true)
+  def date_time_format(date, time = nil, with_year: true, with_month: true)
     month = ' %B' if with_month
     year = ' %Y' if with_year
     time = " at #{time}" if time
@@ -43,7 +43,7 @@ class DateRangeFormatter
 
   def to_s
     if @start_date == @end_date
-      return same_date_formatter(@start_date, @end_date, @start_time, @end_time)
+      return same_date_formatter(@start_date, @start_time, @end_time)
     else
       return default_formatter(@start_date, @end_date, @start_time, @end_time)
     end
