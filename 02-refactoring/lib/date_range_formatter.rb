@@ -55,18 +55,9 @@ class DateRangeFormatter
   end
 
   def default_formatter(start_date, end_date, start_time, end_time)
-    full_start_date = date_with_time_formatter(start_date)
-    full_end_date = date_with_time_formatter(end_date)
-
-    if start_time && end_time
-      "#{full_start_date} at #{start_time} - #{full_end_date} at #{end_time}"
-    elsif start_time
-      "#{full_start_date} at #{start_time} - #{full_end_date}"
-    elsif end_time
-      "#{full_start_date} - #{full_end_date} at #{end_time}"
-    else
-      "#{full_start_date} - #{full_end_date}"
-    end
+    full_start_date = date_with_time_formatter(start_date, start_time)
+    full_end_date = date_with_time_formatter(end_date, end_time)
+    "#{full_start_date} - #{full_end_date}"
   end
 
   def date_with_time_formatter(date, time=nil, join_word='at')
